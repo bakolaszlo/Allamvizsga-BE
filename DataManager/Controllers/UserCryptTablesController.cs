@@ -13,23 +13,23 @@ namespace DataManager.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserCryptTables1Controller : ControllerBase
+    public class UserCryptTablesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public UserCryptTables1Controller(ApplicationDbContext context)
+        public UserCryptTablesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/UserCryptTables1
+        // GET: api/UserCryptTables
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserCryptTable>>> GetUserCryptTable()
         {
             return await _context.UserCryptTable.ToListAsync();
         }
 
-        // GET: api/UserCryptTables1/5
+        // GET: api/UserCryptTables/5
         [HttpGet("{id}")]
         public async Task<ActionResult<UserCryptTable>> GetUserCryptTable(string id)
         {
@@ -43,7 +43,7 @@ namespace DataManager.Controllers
             return userCryptTable;
         }
 
-        // PUT: api/UserCryptTables1/5
+        // PUT: api/UserCryptTables/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUserCryptTable(string id, UserCryptTable userCryptTable)
@@ -74,7 +74,7 @@ namespace DataManager.Controllers
             return NoContent();
         }
 
-        // POST: api/UserCryptTables1
+        // POST: api/UserCryptTables
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<UserCryptTable>> PostUserCryptTable(UserCryptTable userCryptTable)
@@ -99,7 +99,7 @@ namespace DataManager.Controllers
             return CreatedAtAction("GetUserCryptTable", new { id = userCryptTable.Name }, userCryptTable);
         }
 
-        // DELETE: api/UserCryptTables1/5
+        // DELETE: api/UserCryptTables/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUserCryptTable(string id)
         {
