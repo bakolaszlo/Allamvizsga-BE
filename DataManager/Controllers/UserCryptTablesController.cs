@@ -3,147 +3,116 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DataManager.Data;
 using DataManager.Model;
 
 namespace DataManager.Controllers
 {
-    public class UserCryptTablesController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class UserCryptTables1Controller : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public UserCryptTablesController(ApplicationDbContext context)
+        public UserCryptTables1Controller(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: UserCryptTables
-        public async Task<IActionResult> Index()
+        // GET: api/UserCryptTables1
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<UserCryptTable>>> GetUserCryptTable()
         {
-            return View(await _context.UserCryptTable.ToListAsync());
+            return await _context.UserCryptTable.ToListAsync();
         }
 
-        // GET: UserCryptTables/Details/5
-        public async Task<IActionResult> Details(string id)
+        // GET: api/UserCryptTables1/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<UserCryptTable>> GetUserCryptTable(string id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var userCryptTable = await _context.UserCryptTable
-                .FirstOrDefaultAsync(m => m.Name == id);
-            if (userCryptTable == null)
-            {
-                return NotFound();
-            }
-
-            return View(userCryptTable);
-        }
-
-        // GET: UserCryptTables/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: UserCryptTables/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,EncryptedName")] UserCryptTable userCryptTable)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(userCryptTable);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(userCryptTable);
-        }
-
-        // GET: UserCryptTables/Edit/5
-        public async Task<IActionResult> Edit(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var userCryptTable = await _context.UserCryptTable.FindAsync(id);
+
             if (userCryptTable == null)
             {
                 return NotFound();
             }
-            return View(userCryptTable);
+
+            return userCryptTable;
         }
 
-        // POST: UserCryptTables/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Name,EncryptedName")] UserCryptTable userCryptTable)
+        // PUT: api/UserCryptTables1/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutUserCryptTable(string id, UserCryptTable userCryptTable)
         {
             if (id != userCryptTable.Name)
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            if (ModelState.IsValid)
+            _context.Entry(userCryptTable).State = EntityState.Modified;
+
+            try
             {
-                try
-                {
-                    _context.Update(userCryptTable);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UserCryptTableExists(userCryptTable.Name))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
             }
-            return View(userCryptTable);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UserCryptTableExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
-        // GET: UserCryptTables/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        // POST: api/UserCryptTables1
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<UserCryptTable>> PostUserCryptTable(UserCryptTable userCryptTable)
         {
-            if (id == null)
+            _context.UserCryptTable.Add(userCryptTable);
+            try
             {
-                return NotFound();
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (UserCryptTableExists(userCryptTable.Name))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
             }
 
-            var userCryptTable = await _context.UserCryptTable
-                .FirstOrDefaultAsync(m => m.Name == id);
+            return CreatedAtAction("GetUserCryptTable", new { id = userCryptTable.Name }, userCryptTable);
+        }
+
+        // DELETE: api/UserCryptTables1/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUserCryptTable(string id)
+        {
+            var userCryptTable = await _context.UserCryptTable.FindAsync(id);
             if (userCryptTable == null)
             {
                 return NotFound();
             }
 
-            return View(userCryptTable);
-        }
-
-        // POST: UserCryptTables/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
-        {
-            var userCryptTable = await _context.UserCryptTable.FindAsync(id);
             _context.UserCryptTable.Remove(userCryptTable);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return NoContent();
         }
 
         private bool UserCryptTableExists(string id)
