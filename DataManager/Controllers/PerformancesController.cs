@@ -11,6 +11,7 @@ using DataManager.Model;
 
 namespace DataManager.Controllers
 {
+    [Route("api/data")]
     public class PerformancesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -20,135 +21,81 @@ namespace DataManager.Controllers
             _context = context;
         }
 
-        // GET: Performances
-        public async Task<IActionResult> Index()
+        // GET: Data
+        [HttpGet]
+        public IEnumerable<Performance> Index()
         {
-            return View(await _context.Performances.ToListAsync());
+            return _context.Performances.ToList();
         }
 
-        // GET: Performances/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: Data/Details/5
+        [Route("/details/{id}")]
+        [HttpGet]
+        public Performance Details(int? id)
         {
             if (id == null)
             {
-                return NotFound();
+                return null;
             }
 
-            var performance = await _context.Performances
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var performance = _context.Performances
+                .FirstOrDefault(m => m.Id == id);
             if (performance == null)
             {
-                return NotFound();
+                return null;
             }
 
-            return View(performance);
+            return performance;
         }
 
         // GET: Performances/Create
-        public IActionResult Create()
+        [HttpPost]
+        public Performance Create([FromForm] Performance performance)
         {
-            return View();
+            _context.Add(performance);
+            _context.SaveChanges();
+            return _context.Performances.FirstOrDefault(m => m.Id == performance.Id);
         }
 
-        // POST: Performances/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Gender,CalibrationGrade,TimeSpentToComplete,Pin,ComplitionDate")] Performance performance)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(performance);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(performance);
-        }
 
         // GET: Performances/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        [HttpPut]
+        public Performance Edit([FromForm] Performance performance)
         {
-            if (id == null)
+            if (performance.Id == null)
             {
-                return NotFound();
+                return null;
             }
 
-            var performance = await _context.Performances.FindAsync(id);
-            if (performance == null)
+            var performanceToUpdate = _context.Performances.Find(performance.Id);
+            if (performanceToUpdate == null)
             {
-                return NotFound();
+                return null;
             }
-            return View(performance);
+            _context.Performances.Update(performance);
+            _context.SaveChanges();
+            return performance;
         }
 
-        // POST: Performances/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Gender,CalibrationGrade,TimeSpentToComplete,Pin,ComplitionDate")] Performance performance)
-        {
-            if (id != performance.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(performance);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PerformanceExists(performance.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(performance);
-        }
-
+        
         // GET: Performances/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        [HttpDelete]
+        public Performance Delete(int? id)
         {
             if (id == null)
             {
-                return NotFound();
+                return null;
             }
 
-            var performance = await _context.Performances
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var performance = _context.Performances
+                .FirstOrDefault(m => m.Id == id);
             if (performance == null)
             {
-                return NotFound();
+                return null;
             }
 
-            return View(performance);
+            return performance;
         }
 
-        // POST: Performances/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var performance = await _context.Performances.FindAsync(id);
-            _context.Performances.Remove(performance);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool PerformanceExists(int id)
-        {
-            return _context.Performances.Any(e => e.Id == id);
-        }
     }
 }

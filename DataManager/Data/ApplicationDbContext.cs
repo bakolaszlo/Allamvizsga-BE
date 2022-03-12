@@ -9,5 +9,7 @@ namespace DataManager.Data
             : base(options) { }
 
         public DbSet<Performance> Performances => Set<Performance>();
+
+        public DbSet<DataManager.Model.UserCryptTable> UserCryptTable { get; set; }
     }
 }
