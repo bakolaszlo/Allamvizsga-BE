@@ -22,9 +22,16 @@ builder.Services.AddCors(options =>
         });
 });
 
-var context = new ApplicationDbContext();
-context.Database.Migrate();
-context.SaveChanges();
+try
+{
+    var context = new ApplicationDbContext();
+    context.Database.Migrate();
+    context.SaveChanges();
+}
+catch (Exception ex)
+{
+    throw new Exception("Failed to apply migrations. Stopping service.", ex);
+}
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
