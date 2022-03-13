@@ -23,6 +23,18 @@ namespace DataManager.Data
                    .AddJsonFile("appsettings.json")
                    .Build();
                 var connectionString = configuration.GetConnectionString("DefaultConnection");
+                var originalConnectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
+                if (originalConnectionString != null)
+                {
+                    try
+                    {
+                        connectionString = StartupHelper.GetHerokuConnectionString(originalConnectionString);
+                    }
+                    catch (Exception exc)
+                    {
+                        // throw new Exception($"Cannot parse connection string from {originalConnectionString}.", exc);
+                    }
+                }
                 optionsBuilder.UseNpgsql(connectionString);
             }
         }
