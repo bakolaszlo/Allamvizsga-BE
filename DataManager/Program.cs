@@ -22,6 +22,9 @@ builder.Services.AddCors(options =>
         });
 });
 
+var context = new ApplicationDbContext();
+context.Database.Migrate();
+context.SaveChanges();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

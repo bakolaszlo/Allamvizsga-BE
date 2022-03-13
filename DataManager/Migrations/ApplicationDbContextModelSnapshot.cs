@@ -35,7 +35,7 @@ namespace DataManager.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("ComplitionDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Gender")
                         .IsRequired()

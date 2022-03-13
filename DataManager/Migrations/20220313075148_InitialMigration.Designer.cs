@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataManager.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220312115030_InitialMigration")]
+    [Migration("20220313075148_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,7 +37,7 @@ namespace DataManager.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("ComplitionDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Gender")
                         .IsRequired()
