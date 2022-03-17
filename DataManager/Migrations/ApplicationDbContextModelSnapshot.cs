@@ -37,7 +37,15 @@ namespace DataManager.Migrations
                     b.Property<DateTime>("ComplitionDate")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<string>("DistanceBetweenDisplayAndUser")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LightSurrounding")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -45,8 +53,20 @@ namespace DataManager.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("QOVision")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ScreenDisplaySize")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<int>("TimeSpentToComplete")
                         .HasColumnType("integer");
+
+                    b.Property<string>("UserAge")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("UserName")
                         .IsRequired()
@@ -55,20 +75,6 @@ namespace DataManager.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Performances");
-                });
-
-            modelBuilder.Entity("DataManager.Model.UserCryptTable", b =>
-                {
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<string>("EncryptedName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Name");
-
-                    b.ToTable("UserCryptTable");
                 });
 #pragma warning restore 612, 618
         }

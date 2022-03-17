@@ -18,26 +18,19 @@ namespace DataManager.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     UserName = table.Column<string>(type: "text", nullable: false),
                     Gender = table.Column<string>(type: "text", nullable: false),
+                    UserAge = table.Column<string>(type: "text", nullable: false),
                     CalibrationGrade = table.Column<string>(type: "text", nullable: false),
                     TimeSpentToComplete = table.Column<int>(type: "integer", nullable: false),
                     Pin = table.Column<string>(type: "text", nullable: false),
-                    ComplitionDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                    ComplitionDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    ScreenDisplaySize = table.Column<string>(type: "text", nullable: false),
+                    DistanceBetweenDisplayAndUser = table.Column<string>(type: "text", nullable: false),
+                    QOVision = table.Column<string>(type: "text", nullable: false),
+                    LightSurrounding = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Performances", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserCryptTable",
-                columns: table => new
-                {
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    EncryptedName = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserCryptTable", x => x.Name);
                 });
         }
 
@@ -45,9 +38,6 @@ namespace DataManager.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Performances");
-
-            migrationBuilder.DropTable(
-                name: "UserCryptTable");
         }
     }
 }
