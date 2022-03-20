@@ -6,6 +6,7 @@
         public string UserName { get; set; }
         public string Gender { get; set; }
         public string UserAge {get;set;}
+        public string Difficulty { get; set; }
         public string CalibrationGrade { get; set; }
         public int TimeSpentToComplete { get; set; }
         public string Pin { get; set; }
